@@ -228,7 +228,7 @@ waiting for the publish event.
 
 let receive_report (s: string) : unit = 
   ignore (WEvent.add_listener publish (fun () -> fakeNewsNetwork s)); 
-  ignore (WEvent.add_listener publish (fun () -> buzzFake s)); 
+  ignore (WEvent.add_listener publish (fun () -> buzzFake s));;
 
 (*......................................................................
 Exercise 10: Register the receieve_report listener to listen for the
@@ -261,6 +261,4 @@ out the headlines. You should see the headlines printed after
 the line above. 
 ......................................................................*)
 
-let _ = WEvent.fire_event publish h4 ;; 
-let _ = WEvent.fire_event publish h5 ;;
-let _ = WEvent.fire_event publish h6 ;; 
+let _ = WEvent.fire_event publish () ;; 

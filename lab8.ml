@@ -215,7 +215,7 @@ Exercise 8: Create a new event called publish to signal that all
 stories should be published. The event should be a unit WEvent.event.
 ......................................................................*)
 
-let publish = WEvent.new_event () ;; 
+let publish : unit WEvent.event = WEvent.new_event () ;; 
 
 (*......................................................................
 Exercise 9: Write a function receive_report to handle new news
@@ -227,18 +227,15 @@ waiting for the publish event.
 ......................................................................*)
 
 let receive_report (s: string) : unit = 
-  let id_fake = WEvent.add_listener publish fakeNewsNetwork in 
-  let id_buzz = WEvent.add_listener publish buzzFake in 
-
-
-fire_event receive_report 
+  ignore (WEvent.add_listener publish (fun () -> fakeNewsNetwork s)); 
+  ignore (WEvent.add_listener publish (fun () -> buzzFake s)); 
 
 (*......................................................................
 Exercise 10: Register the receieve_report listener to listen for the
 newswire event.
 ......................................................................*)
 
-let id_receive = WEvent.add_listener newswire receive_report 
+let id_receive = WEvent.add_listener newswire receive_report ;; 
 
 (* Here are some new headlines to use for testing this part. *)
 
@@ -253,8 +250,9 @@ the news. (They've just queued up a bunch of listeners on the publish
 event instead.)
 ......................................................................*)
 
-(* .. *)
-
+let _ = WEvent.fire_event newswire h4 ;; 
+let _ = WEvent.fire_event newswire h5 ;;
+let _ = WEvent.fire_event newswire h6 ;; 
 print_string "Moved to publication.\n" ;;
 
 (*......................................................................
@@ -263,4 +261,6 @@ out the headlines. You should see the headlines printed after
 the line above. 
 ......................................................................*)
 
-(* .. *)
+let _ = WEvent.fire_event publish h4 ;; 
+let _ = WEvent.fire_event publish h5 ;;
+let _ = WEvent.fire_event publish h6 ;; 
